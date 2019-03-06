@@ -18,7 +18,6 @@ namespace TinyDriveDotnetStarter.Controllers
   {
     private string _apiKey { get; set; }
     private string _privateKeyFile { get; set; }
-
     private bool _scopeUser { get; set; }
     private User[] _users { get; set; }
 

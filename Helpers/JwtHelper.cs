@@ -32,6 +32,7 @@ namespace TinyDriveDotnetStarter
         throw new Exception($"Invalid RSA key in file: {privateKeyFile}");
       }
     }
+
     public static string CreateToken(object payload, string privateKey)
     {
       IOpenSSLPrivateKeyDecoder decoder = new OpenSSLPrivateKeyDecoder();
