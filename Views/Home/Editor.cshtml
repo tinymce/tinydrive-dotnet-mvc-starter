@@ -1,0 +1,9 @@
+﻿@{
+    ViewData["Title"] = "Editor";
+}
+
+<h1>Welcome @Model.UserName <a class="logout" href="/Home/Logout">Logout</a></h1>
+<p>TinyMCE editor instance setup with Tiny Drive integated into the link, image and media dialogs and with a separate direct insertfile button.</p>
+<textarea></textarea>
+<script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=@Model.ApiKey"></script>
+<script src="~/js/init.js"></script>
