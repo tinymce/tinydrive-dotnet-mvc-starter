@@ -1,31 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
-using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using TinyDriveDotnetStarter.Models;
-using TinyDriveDotNetStarter;
-using JWT;
-using JWT.Algorithms;
-using JWT.Serializers;
-using System.Security.Cryptography.X509Certificates;
+using System.Linq;
 
 namespace TinyDriveDotnetStarter.Controllers
 {
+  class User
+  {
+    public string Login { get; set; }
+    public string Password { get; set; }
+    public string Name { get; set; }
+  }
+
   public class HomeController : Controller
   {
     private string _apiKey { get; set; }
     private string _privateKeyFile { get; set; }
 
     private bool _scopeUser { get; set; }
+    private User[] _users { get; set; }
 
     public HomeController(IConfiguration config)
     {
@@ -33,6 +28,10 @@ namespace TinyDriveDotnetStarter.Controllers
       _apiKey = opts["apiKey"];
       _privateKeyFile = opts["privateKeyFile"];
       _scopeUser = Boolean.Parse(opts["scopeUser"]);
+      _users = opts.GetSection("users")
+        .GetChildren()
+        .Select(user => new User { Login = user["login"], Password = user["password"], Name = user["name"] })
+        .ToArray();
     }
 
     public IActionResult Index()
@@ -43,13 +42,23 @@ namespace TinyDriveDotnetStarter.Controllers
     [HttpPost]
     public ActionResult Index(string login, string password)
     {
-      HttpContext.Session.SetString("login", login);
-      return RedirectToAction("Editor");
+      var user = _users.FirstOrDefault(u => u.Login == login && u.Password == password);
+
+      if (user == null)
+      {
+        return View(new LoginViewModel { Error = "Invalid username/password." });
+      }
+      else
+      {
+        HttpContext.Session.SetString("login", user.Login);
+        HttpContext.Session.SetString("name", user.Name);
+        return RedirectToAction("Editor");
+      }
     }
 
     public IActionResult Editor()
     {
-      var userName = HttpContext.Session.GetString("login");
+      var userName = HttpContext.Session.GetString("name");
       if (userName == null)
       {
         return RedirectToAction("Index");
@@ -65,10 +74,11 @@ namespace TinyDriveDotnetStarter.Controllers
     public JsonResult Jwt()
     {
       var login = HttpContext.Session.GetString("login");
+      var name = HttpContext.Session.GetString("name");
 
       if (login != null)
       {
-        var token = JwtHelper.CreateTinyDriveToken(login, "John Doe", _scopeUser, _privateKeyFile);
+        var token = JwtHelper.CreateTinyDriveToken(login, name, _scopeUser, _privateKeyFile);
         return Json(new { token });
       }
       else
