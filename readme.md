@@ -4,7 +4,7 @@ This project will help you get started with Tiny Drive and allow you to play aro
 
 ## Pre requirements
 
-.NET Core 2.0 on any supported platform.
+.NET Core 2.0+ on any supported platform.
 
 ## Getting started steps
 
@@ -16,11 +16,11 @@ These are the steps needed to get this project running on your machine:
 $ git clone git@github.com:tinymce/tinydrive-dotnet-starter.git
 ```
 
-### 2. Change the `apiKey` in `appsettings.Development.json`
+### 2. Change the `apiKey` in `tinydrive-dotnet-mvc-starter/appsettings.Development.json`
 
 You get the api key from the `API Key Manager` account manager at http://tiny.cloud.
 
-### 3. Replace the `private.key` file with your generated private RSA key 
+### 3. Create a `tinydrive-dotnet-mvc-starter/private.key` file containing your generated private RSA key
 
 You get the private RSA key from the `JWT Key Manager` account manager at http://tiny.cloud.
 

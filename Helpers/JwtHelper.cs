@@ -8,22 +8,22 @@ namespace TinyDriveDotnetStarter
 {
   public static class JwtHelper
   {
-    public static string CreateTinyDriveToken(string sub, string name, bool scopeUser, string privateKeyFile)
+    public static string CreateTinyDriveToken(string username, string fullname, bool scopeUser, string privateKeyFile)
     {
       var issued = ToUnixTime(DateTime.Now);
       var expires = ToUnixTime(DateTime.Now.AddMinutes(10));
       var privateKey = File.ReadAllText(privateKeyFile);
 
       var payload = new Dictionary<string, object> {
-        { "sub", sub },     // Unique user id string
-        { "name", name },   // Full name of user
+        { "sub", username },     // Unique user id string
+        { "name", fullname },    // Full name of user
         { "iat", issued },
         { "exp", expires }
       };
 
       // Scopes the path to a specific user directory
       if (scopeUser) {
-        payload["https://claims.tiny.cloud/drive/root"] = $"/{sub}";
+        payload["https://claims.tiny.cloud/drive/root"] = $"/{username}";
       }
 
       try {

@@ -9,9 +9,9 @@ namespace TinyDriveDotnetStarter.Controllers
 {
   class User
   {
-    public string Login { get; set; }
+    public string UserName { get; set; }
     public string Password { get; set; }
-    public string Name { get; set; }
+    public string FullName { get; set; }
   }
 
   public class HomeController : Controller
@@ -29,7 +29,7 @@ namespace TinyDriveDotnetStarter.Controllers
       _scopeUser = Boolean.Parse(opts["scopeUser"]);
       _users = opts.GetSection("users")
         .GetChildren()
-        .Select(user => new User { Login = user["login"], Password = user["password"], Name = user["name"] })
+        .Select(user => new User { UserName = user["username"], Password = user["password"], FullName = user["fullname"] })
         .ToArray();
     }
 
@@ -39,9 +39,9 @@ namespace TinyDriveDotnetStarter.Controllers
     }
 
     [HttpPost]
-    public ActionResult Index(string login, string password)
+    public ActionResult Index(string username, string password)
     {
-      var user = _users.FirstOrDefault(u => u.Login == login && u.Password == password);
+      var user = _users.FirstOrDefault(u => u.UserName == username && u.Password == password);
 
       if (user == null)
       {
@@ -49,22 +49,22 @@ namespace TinyDriveDotnetStarter.Controllers
       }
       else
       {
-        HttpContext.Session.SetString("login", user.Login);
-        HttpContext.Session.SetString("name", user.Name);
+        HttpContext.Session.SetString("username", user.UserName);
+        HttpContext.Session.SetString("fullname", user.FullName);
         return RedirectToAction("Editor");
       }
     }
 
     public IActionResult Editor()
     {
-      var userName = HttpContext.Session.GetString("name");
-      if (userName == null)
+      var fullName = HttpContext.Session.GetString("fullname");
+      if (fullName == null)
       {
         return RedirectToAction("Index");
       }
       else
       {
-        return View(new EditorViewModel { ApiKey = _apiKey, UserName = userName });
+        return View(new EditorViewModel { ApiKey = _apiKey, FullName = fullName });
       }
     }
 
@@ -72,12 +72,12 @@ namespace TinyDriveDotnetStarter.Controllers
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public JsonResult Jwt()
     {
-      var login = HttpContext.Session.GetString("login");
-      var name = HttpContext.Session.GetString("name");
+      var username = HttpContext.Session.GetString("username");
+      var fullname = HttpContext.Session.GetString("fullname");
 
-      if (login != null)
+      if (username != null)
       {
-        var token = JwtHelper.CreateTinyDriveToken(login, name, _scopeUser, _privateKeyFile);
+        var token = JwtHelper.CreateTinyDriveToken(username, fullname, _scopeUser, _privateKeyFile);
         return Json(new { token });
       }
       else
