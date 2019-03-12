@@ -21,7 +21,8 @@ namespace TinyDriveDotnetStarter
         { "exp", expires }
       };
 
-      // Scopes the path to a specific user directory
+      // When this is set the user will only be able to manage and see files in the specified root
+      // directory. This makes it possible to have a dedicated home directory for each user.
       if (scopeUser) {
         payload["https://claims.tiny.cloud/drive/root"] = $"/{username}";
       }
