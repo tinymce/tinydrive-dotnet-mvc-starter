@@ -3,22 +3,28 @@
     ViewData["Title"] = "Login";
 }
 
-<form asp-controller="Main" asp-action="Index">
-  @if (Model.Error != "")
-  {
-    @Model.Error
-  }
-  <p>Login with the user/passwords available in the config.js file</p>
+<div class="container vh-100 d-flex justify-content-center align-items-center">
+  <form asp-controller="Main" asp-action="Index">
+    @if (Model.Error != "")
+    {
+      <div class="alert alert-danger" role="alert">@Model.Error</div>
+    }
 
-  <div>
-    <label for="username">User:</label>
-    <input type="text" id="username" name="username" value="johndoe">
-  </div>
+    <h1 class="h3 mb-3">Login</h1>
+    <p>Login with the user/passwords available in the <code>appsettings.Development.json</code> file</p>
 
-  <div>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" value="password">
-  </div>
+    <div class="form-group">
+      <label for="username" class="font-weight-bold">User</label>
+      <input type="text" class="form-control" id="username" name="username" value="johndoe">
+    </div>
 
-  <input type="submit" value="Login">
-</form>
+    <div class="form-group">
+      <label for="password" class="font-weight-bold">Password</label>
+      <input type="password" class="form-control" id="password" name="password" value="password">
+    </div>
+
+    <div class="form-group">
+      <input type="submit" class="btn btn-primary" value="Login">
+    </div>
+  </form>
+</div>
