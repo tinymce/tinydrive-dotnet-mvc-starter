@@ -2,7 +2,7 @@
 
 This project will help you get started with Tiny Drive and allow you to play around with its features.
 
-## Pre requirements
+## Prerequisites
 
 .NET Core 2.0+ on any supported platform.
 
