@@ -13,7 +13,7 @@ These are the steps needed to get this project running on your machine:
 ### 1. Clone this repo to your local machine using
 
 ```
-$ git clone git@github.com:tinymce/tinydrive-dotnet-mvc-starter.git
+$ git clone https://github.com/tinymce/tinydrive-dotnet-mvc-starter.git
 ```
 
 ### 2. Change the `apiKey` in `tinydrive-dotnet-mvc-starter/appsettings.Development.json`
